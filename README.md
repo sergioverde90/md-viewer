@@ -26,7 +26,7 @@ pnpm typecheck
 - Tables sit on a soft gray card so they stand out from the prose; long cells clamp to two lines with
   per-row expand controls and an expand-all icon above the table, so nothing scrolls sideways
 - A ghosted contents rail on wide screens lists the H1–H3 headings, highlights the current section,
-  and fades up on hover or keyboard focus
+  and turns into a frosted-glass panel on hover or keyboard focus
 - A matching ghost button in the top-right switches light/dark; the choice is remembered, and the OS
   preference is followed until the first toggle
 - Fenced code with highlight.js (common languages)

@@ -11,6 +11,21 @@
   --table-bg: light-dark(#f6f3ec, #161615);
   --accent: light-dark(#2f5fbf, #8fb0f0);
 
+  --glass-bg: light-dark(
+    color-mix(in srgb, #ffffff 30%, transparent),
+    color-mix(in srgb, #1c1b19 34%, transparent)
+  );
+  --glass-bg-fallback: light-dark(
+    color-mix(in srgb, #fffdf9 92%, transparent),
+    color-mix(in srgb, #1c1b19 94%, transparent)
+  );
+  --glass-edge: light-dark(
+    color-mix(in srgb, #1f1e1b 10%, transparent),
+    color-mix(in srgb, #e9e7e2 12%, transparent)
+  );
+  --glass-shadow: 0 10px 30px -14px light-dark(rgba(31, 30, 27, 0.22), rgba(0, 0, 0, 0.55));
+  --glass-highlight: light-dark(rgba(255, 255, 255, 0.75), rgba(255, 255, 255, 0.05));
+
   --measure: 68ch;
   --page-x: clamp(1.25rem, 6vw, 2.75rem);
   --table-gutter: clamp(0.75rem, 2.5vw, 2rem); /* space between a full-width table and the window edge */
@@ -540,19 +555,40 @@ body {
     z-index: 5;
     display: flex;
     flex-direction: column;
-    width: 12rem;
+    width: 13rem;
+    padding: 0.9rem 0.6rem 0.75rem;
+    border: 1px solid transparent;
+    border-radius: 14px;
     opacity: 0.1;
-    transition: opacity 180ms ease;
+    transition:
+      opacity 180ms ease,
+      background-color 180ms ease,
+      border-color 180ms ease,
+      box-shadow 180ms ease;
   }
 
   .toc:hover,
   .toc:focus-within {
+    border-color: var(--glass-edge);
+    background: var(--glass-bg-fallback);
+    box-shadow:
+      var(--glass-shadow),
+      inset 0 1px 0 var(--glass-highlight);
     opacity: 1;
+  }
+
+  @supports ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+    .toc:hover,
+    .toc:focus-within {
+      background: var(--glass-bg);
+      -webkit-backdrop-filter: blur(3px) saturate(140%);
+      backdrop-filter: blur(3px) saturate(140%);
+    }
   }
 
   .toc-title {
     margin: 0 0 0.85rem;
-    padding-left: 0.95rem;
+    padding-left: 0.35rem;
     color: var(--muted);
     font-size: 0.68rem;
     font-weight: 600;
@@ -587,7 +623,7 @@ body {
 
   .toc-link {
     display: -webkit-box;
-    padding: 0.18rem 0.4rem 0.18rem 0.95rem;
+    padding: 0.18rem 0.25rem 0.18rem 0.35rem;
     overflow: hidden;
     color: var(--muted);
     font-size: 0.795rem;
@@ -605,11 +641,11 @@ body {
   }
 
   .toc-link[data-level='2'] {
-    padding-left: 1.5rem;
+    padding-left: 0.9rem;
   }
 
   .toc-link[data-level='3'] {
-    padding-left: 2.05rem;
+    padding-left: 1.45rem;
   }
 
   .toc-link:hover,
