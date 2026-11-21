@@ -551,39 +551,19 @@ body {
     position: fixed;
     top: 4.5rem;
     bottom: 2.75rem;
-    left: clamp(1.25rem, 2.2vw, 2rem);
+    right: clamp(1.25rem, 2.2vw, 2rem);
     z-index: 5;
     display: flex;
     flex-direction: column;
     width: 13rem;
     padding: 0.9rem 0.6rem 0.75rem;
-    border: 1px solid transparent;
-    border-radius: 14px;
     opacity: 0.1;
-    transition:
-      opacity 180ms ease,
-      background-color 180ms ease,
-      border-color 180ms ease,
-      box-shadow 180ms ease;
+    transition: opacity 180ms ease;
   }
 
   .toc:hover,
   .toc:focus-within {
-    border-color: var(--glass-edge);
-    background: var(--glass-bg-fallback);
-    box-shadow:
-      var(--glass-shadow),
-      inset 0 1px 0 var(--glass-highlight);
     opacity: 1;
-  }
-
-  @supports ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
-    .toc:hover,
-    .toc:focus-within {
-      background: var(--glass-bg);
-      -webkit-backdrop-filter: blur(3px) saturate(140%);
-      backdrop-filter: blur(3px) saturate(140%);
-    }
   }
 
   .toc-title {
@@ -667,6 +647,249 @@ body {
   }
 }
 
+/* ---------- Folder tree ---------- */
+
+.file-tree {
+  display: none;
+}
+
+.file-tree[hidden] {
+  display: none;
+}
+
+body.is-empty .file-tree {
+  display: none;
+}
+
+@media (min-width: 1280px) {
+  .file-tree {
+    position: fixed;
+    top: 4.5rem;
+    bottom: 2.75rem;
+    left: clamp(1.25rem, 2.2vw, 2rem);
+    z-index: 5;
+    display: flex;
+    flex-direction: column;
+    width: 13rem;
+    padding: 0.9rem 0.6rem 0.75rem;
+    opacity: 0.1;
+    transition: opacity 180ms ease;
+  }
+
+  .file-tree:hover,
+  .file-tree:focus-within {
+    opacity: 1;
+  }
+
+  .file-tree-header {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    margin: 0 0 0.2rem;
+  }
+
+  .file-tree-title {
+    flex: 1 1 auto;
+    margin: 0;
+    padding-left: 0.35rem;
+    color: var(--muted);
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .file-tree-root {
+    margin: 0 0 0.6rem;
+    padding-left: 0.35rem;
+    overflow: hidden;
+    color: var(--fg-soft);
+    font-size: 0.76rem;
+    line-height: 1.35;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .file-tree-root:empty {
+    display: none;
+  }
+
+  .file-tree-body {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-width: thin;
+    scrollbar-color: var(--rule-strong) transparent;
+  }
+
+  .file-tree-body::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  .file-tree-body::-webkit-scrollbar-thumb {
+    border-radius: 2px;
+    background: var(--rule-strong);
+  }
+
+  .tree-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .tree-nested {
+    margin-left: 0.45rem;
+    padding-left: 0.55rem;
+    border-left: 1px solid var(--rule);
+  }
+
+  .tree-item {
+    margin: 0;
+  }
+
+  .tree-dir > summary {
+    list-style: none;
+  }
+
+  .tree-dir > summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .tree-row {
+    display: flex;
+    align-items: center;
+    gap: 0.38rem;
+    width: 100%;
+    padding: 0.2rem 0.3rem;
+    border: 0;
+    border-radius: 5px;
+    background: transparent;
+    color: var(--muted);
+    font: inherit;
+    font-size: 0.795rem;
+    line-height: 1.42;
+    text-align: left;
+    text-decoration: none;
+    cursor: pointer;
+    transition:
+      color 140ms ease,
+      background-color 140ms ease;
+  }
+
+  .tree-row:hover {
+    color: var(--fg);
+  }
+
+  .tree-file-row:focus-visible,
+  .tree-dir > summary:focus-visible {
+    color: var(--fg);
+    outline: 1px solid color-mix(in srgb, var(--fg) 28%, transparent);
+    outline-offset: 1px;
+  }
+
+  .tree-file-row.is-active {
+    background: var(--tint);
+    color: var(--fg);
+    font-weight: 560;
+  }
+
+  .tree-chevron {
+    flex: none;
+    opacity: 0.65;
+    transition: transform 150ms ease;
+  }
+
+  .tree-dir[open] > summary .tree-chevron {
+    transform: rotate(90deg);
+  }
+
+  .tree-spacer {
+    flex: none;
+    width: 12px;
+  }
+
+  .tree-icon {
+    flex: none;
+    opacity: 0.7;
+  }
+
+  .tree-label {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+
+@media (min-width: 1280px) and (hover: none) {
+  .file-tree {
+    opacity: 0.55;
+  }
+}
+
+/* ---------- Open menu ---------- */
+
+.open-menu {
+  position: fixed;
+  top: 52px;
+  left: 10px;
+  z-index: 11;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 11.5rem;
+  padding: 0.3rem;
+  border: 1px solid var(--glass-edge);
+  border-radius: 10px;
+  background: var(--glass-bg-fallback);
+  box-shadow:
+    var(--glass-shadow),
+    inset 0 1px 0 var(--glass-highlight);
+}
+
+.open-menu[hidden] {
+  display: none;
+}
+
+@supports ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .open-menu {
+    background: var(--glass-bg);
+    -webkit-backdrop-filter: blur(6px) saturate(140%);
+    backdrop-filter: blur(6px) saturate(140%);
+  }
+}
+
+.open-menu button {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.45rem 0.6rem;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--fg);
+  font: inherit;
+  font-size: 0.82rem;
+  line-height: 1.3;
+  text-align: left;
+  cursor: pointer;
+}
+
+.open-menu button:hover,
+.open-menu button:focus-visible {
+  background: var(--tint);
+}
+
+.open-menu button:focus-visible {
+  outline: 1px solid color-mix(in srgb, var(--fg) 28%, transparent);
+  outline-offset: -2px;
+}
+
+.open-menu svg {
+  flex: none;
+  color: var(--muted);
+}
+
 /* ---------- The one button ---------- */
 
 .open-button,
@@ -700,6 +923,7 @@ body {
 
 .open-button:hover,
 .open-button:focus-visible,
+.open-button[aria-expanded='true'],
 .theme-toggle:hover,
 .theme-toggle:focus-visible {
   background: var(--tint);
@@ -749,6 +973,7 @@ body.is-empty .open-button {
 .empty {
   display: grid;
   place-items: center;
+  gap: 0.9rem;
   min-height: 100dvh;
   padding: 2rem var(--page-x);
 }
@@ -799,6 +1024,32 @@ body:not(.is-empty) .empty {
 .dropzone:focus-visible {
   outline: 1px solid color-mix(in srgb, var(--fg) 28%, transparent);
   outline-offset: 3px;
+}
+
+.empty-folder {
+  padding: 0.3rem 0.5rem;
+  border: 0;
+  border-radius: 5px;
+  background: transparent;
+  color: var(--muted);
+  font: inherit;
+  font-size: 0.8125rem;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.18em;
+  cursor: pointer;
+  transition: color 140ms ease, background-color 140ms ease;
+}
+
+.empty-folder:hover,
+.empty-folder:focus-visible {
+  background: var(--tint);
+  color: var(--fg);
+}
+
+.empty-folder:focus-visible {
+  outline: 1px solid color-mix(in srgb, var(--fg) 28%, transparent);
+  outline-offset: 2px;
 }
 
 body.dragging .dropzone {
@@ -866,12 +1117,16 @@ body.dragging::after {
   .open-button,
   .theme-toggle,
   .dropzone,
+  .empty-folder,
   body::after,
   .reader a,
   .reader .row-toggle,
   .reader .table-toggle,
   .toc,
-  .toc-link {
+  .toc-link,
+  .file-tree,
+  .tree-row,
+  .tree-chevron {
     transition: none;
   }
 }
@@ -898,8 +1153,10 @@ body.dragging::after {
   .open-button,
   .theme-toggle,
   .empty,
+  .open-menu,
   body::after,
   .toc,
+  .file-tree,
   .reader .row-toggle,
   .reader .table-toggle {
     display: none !important;
